@@ -1,0 +1,53 @@
+.hidden-content {
+    display: none !important;
+}
+.gif-dashboard {
+    width: 350px;
+    height: 350px;
+}
+.block-dashboard p {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.status-content {
+    position: fixed;
+    top: 75px;
+    right: 15px;
+    z-index: 1;
+}
+
+.element-cursor-pointer {
+    cursor: pointer;
+}
+
+.results-box {
+    position: absolute;
+    left: 5px;
+    right: 5px;
+    z-index: 1;
+    max-height: 300px;
+    height: auto;
+    overflow-y: scroll;
+}
+
+.results-box::-webkit-scrollbar {
+    width: 5px;
+    background: #c4c4c4;
+    height: 5px;
+}
+
+.results-box::-webkit-scrollbar-thumb {
+    background: #000;
+    border-radius: 5px;
+}
+
+.category-checkbox-list {
+    height: 130px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.title-facture {
+    font-size: 25px;
+}

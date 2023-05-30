@@ -1,0 +1,222 @@
+$color_1: #fff
+$color_2: #f8eb63
+$color_3: #face17
+$color_4: #121111
+$color_5: #46C378
+$color_6: #EE4444
+
+body, html
+    margin: 0
+    padding: 0
+
+a
+    text-decoration: none
+
+body::-webkit-scrollbar
+    width: 5px
+    background: $color_1
+    height: 5px
+
+body::-webkit-scrollbar-thumb
+    background: $color_3
+    border-radius: 5px
+
+body.app
+    background: $color_3
+
+body.app a
+    color: $color_4
+
+header.app-header
+     background: $color_3 !important
+
+footer.app-footer
+    background: $color_4
+
+.eselvehiculo-background_1
+    background: $color_3 !important
+
+.loading
+    display: flex
+    height: 100vh
+    position: fixed
+    top: 0
+    background: $color_3
+    width: 100%
+    opacity: 1
+    transition: all ease-in-out 2s
+    z-index: 2
+    left: 0
+    justify-content: center
+    align-items: center
+
+.loading > *
+    width: 200px
+    height: auto
+    animation: anitionLoading infinite ease-in 4s
+
+
+.eselvehiculo-logo
+    width: 150px
+    height: auto
+
+
+@keyframes anitionLoading
+    0%
+        transform: scale(1)
+    50%
+        transform: scale(1.5)
+    100%
+        transform: scale(1)
+
+.navbar-brand img
+    width: 150px
+
+.card-login-fix
+    height: 85vh
+
+
+.eselvehiculo-catalogue, .eselvehiculo-contact, .eselvehiculo-ubication
+    position: fixed
+    left: 25px
+    background: $color_5
+    border-radius: 25px
+    width: 55px
+    height: 52px
+    text-align: center
+    padding: 5px
+    z-index: 1
+
+.eselvehiculo-catalogue
+    background: $color_6
+    bottom: 95px
+
+.eselvehiculo-contact
+    background: $color_5
+    bottom: 30px
+
+.eselvehiculo-ubication
+    background: $color_2
+    bottom: 160px
+
+.eselvehiculo-placheholder
+    display: none
+
+.eselvehiculo-ubication:hover .eselvehiculo-placheholder, .eselvehiculo-contact:hover .eselvehiculo-placheholder, .eselvehiculo-catalogue:hover .eselvehiculo-placheholder
+    display: inherit
+    position: absolute
+    top: 4px
+    background: $color_4
+    padding: 10px
+    border-radius: 5px
+    left: 65px
+    color: $color_1
+    width: 150px
+
+.eselvehiculo-placheholder::before
+    content: ''
+    border-top: 10px solid transparent
+    border-bottom: 10px solid transparent
+    border-left: 10px solid transparent
+    border-right: 10px solid $color_4
+    position: absolute
+    width: 0
+    height: 0
+    left: -20px
+
+.eselvehiculo-contact .fa-whatsapp, .eselvehiculo-catalogue .fa-file-pdf-o
+    font-size: 34px
+    color: $color_1
+    display: block
+    margin-top: 2px
+
+.eselvehiculo-ubication .fa-map-marker
+    font-size: 34px
+    color: $color_4
+    display: block
+    margin-top: 2px
+
+.card-discount
+    position: absolute
+    right: 0
+    z-index: 1
+    padding: 5px
+    height: 40px
+    border-top-left-radius: 10px
+    border-bottom-left-radius: 10px
+    display: flex
+
+.search
+    display: flex
+    background: $color_1
+    justify-content: end
+
+.search > i
+    margin-top: auto
+    margin-bottom: auto
+    padding: 5px
+
+.eselvehiculo-button-fix
+    padding: 7px 0 7px 35px
+
+
+.bold-labels .card
+    overflow-y: scroll
+    height: 600px
+    overflow-x: hidden
+
+.details-table
+    border-bottom: 2px solid $color_2
+
+.details-table-item
+    display: flex
+    align-items: center
+    height: 100%
+    margin: 0
+    width: 150px
+    padding: 10px 0
+    justify-content: space-around
+
+.eselvehiculo-box-shadow
+    box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.5)
+    -webkit-box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.5)
+    -moz-box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.5)
+
+
+@media only screen and (max-width: 320px) and (min-width: 300px)
+    .button-mobile-fix
+        display: flex
+        width: 130px
+        justify-content: end
+
+@media only screen and (max-width: 375px) and (min-width: 321px)
+    .button-mobile-fix
+        display: flex
+        width: 185px
+        justify-content: end
+
+@media only screen and (max-width: 480px) and (min-width: 376px)
+    .button-mobile-fix
+        display: flex
+        width: 235px
+        justify-content: end
+@media only screen and (max-width: 660px) and (min-width: 481px)
+    .button-mobile-fix
+        display: flex
+        width: 577px
+        justify-content: end
+@media only screen and (max-width: 840px) and (min-width: 661px)
+    .button-mobile-fix
+        display: flex
+        width: 577px
+        justify-content: end
+@media only screen and (max-width: 992px) and (min-width: 841px)
+    .button-mobile-fix
+        display: flex
+        width: 577px
+        justify-content: end
+@media only screen and (max-width: 1024px) and (min-width: 992px)
+@media only screen and (max-width: 1200px) and (min-width: 1025px)
+@media only screen and (max-width: 1279px) and (min-width: 1201px)
+@media only screen and (max-width: 1919px) and (min-width: 1280px)
+@media only screen and (min-width: 1920px)
