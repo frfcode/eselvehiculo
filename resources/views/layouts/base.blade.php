@@ -59,7 +59,7 @@
       gtag('js', new Date());
       gtag('config', 'G-42XLSS2BHR');
     </script>
-    
+
 </head>
 <body>
     <header>
@@ -79,7 +79,7 @@
                   <a class="nav-link fw-bold" href="/lista/{{$item['name']}}">{{strtoupper($item['name'])}}</a>
                 </li>
               @endforeach
-            
+
               {{-- @if (Route::has('login'))
               <li class="nav-item">
                   <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -95,11 +95,11 @@
       <main>
         {{-- LOADING --}}
         <div class="loading" id="eselvehiculo_loading">
-          <img src="{{ asset('img/loading.png') }}" width="200" alt="eselvehiculo"/> 
+          <img src="{{ asset('img/loading.png') }}" width="200" alt="eselvehiculo"/>
         </div>
 
-        
-        
+
+
         {{-- WHATS APP --}}
         <div>
           <div class="eselvehiculo-contact shadow">

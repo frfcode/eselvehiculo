@@ -25,6 +25,7 @@
     </div>
     @endif
 </div>
+{{-- SELLING BY PRODUCT --}}
 <div class="row hidden-content" id="selling_content">
     <div class="col-12">
         <div class="card mt-4">
@@ -115,7 +116,7 @@
         </div>
     </div>
 </div>
-
+{{-- SELLING LIST BY DAY --}}
 <div class="row" id="selling_content">
     <div class="col-12">
         <div class="card mt-4">
@@ -160,6 +161,7 @@
         </div>
     </div>
 </div>
+{{-- SELLING LIST BY MONTH--}}
 <div class="row hidden-content" id="selling_content">
     <div class="col-12">
         <div class="card mt-4">
@@ -183,7 +185,7 @@
     </div>
 </div>
 @endif
-
+{{-- ADD NEW CLIENT --}}
    {{-- MODAL --}}
    <div class="modal fade" id="modal_add_client" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -274,11 +276,18 @@
     e.preventDefault();
     let getProductQuantity = document.getElementById('product_quantity')
 
+    if(getProductQuantity.value == null || getProductQuantity.value == ''){
+        assignStatus.innerHTML = ''
+        assignStatus.innerHTML = `<span class="p-2 bg-danger">Agrege precio al producto, por favor</span>`
+        timeHoverStatus()
+        return
+    }
+
     if(getInputSearchProduct.value == ''){
-      assignStatus.innerHTML = ''
-      assignStatus.innerHTML = `<span class="p-2 bg-danger">Agrege un producto, por favor</span>`
-      timeHoverStatus()
-      return
+        assignStatus.innerHTML = ''
+        assignStatus.innerHTML = `<span class="p-2 bg-danger">Agrege un producto, por favor</span>`
+        timeHoverStatus()
+        return
     }
 
     let getQuantityProduct = getInputSearchProduct.value.split('|')[1].split(':')[1].replace(' unidades', '')
@@ -545,6 +554,10 @@
       document.getElementById('total_product_cost').innerHTML = 'Total: 0'
       document.getElementById('iva_product_cost').innerHTML = 'IVA: 0'
       products = []
+    }else{
+        assignStatus.innerHTML = ''
+        assignStatus.innerHTML = `<span class="p-2 bg-danger" role="alert"> ${data.message} </span>`
+        timeHoverStatus()
     }
 
 

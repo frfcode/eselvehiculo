@@ -17,7 +17,7 @@ class VehiculoController extends Controller
         //GET NAME BRAND OF VEHICULE
         $search = str_replace('_',' ',$getBrandVehicule[count($getBrandVehicule) - 1]);
         //GET DATA OF DATABASE
-        $menu = Categories::get();
+        $menu = json_decode(file_get_contents(storage_path() . "/app/menu_items.json"), true);
         $vehicule = Vehicules::where('vehicule_brand_model', 'like', '%' . $search . '%')->get();
 
         $title = 'Repuestos para '.strtoupper($search).' | eselvehiculo';
@@ -33,7 +33,7 @@ class VehiculoController extends Controller
         //GET ID VEHICULE MODEL
         $search = $getModelId[count($getModelId) - 1];
         //GET DATA OF DATABASE
-        $menu = Categories::get();
+        $menu = json_decode(file_get_contents(storage_path() . "/app/menu_items.json"), true);
 
         $vehicule = Vehicules::select('vehicule_brand_model')->where('id',$search)->get();
 
