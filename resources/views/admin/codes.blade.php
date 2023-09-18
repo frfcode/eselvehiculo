@@ -35,7 +35,7 @@
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div class="mt-4">
                 <div class="container-fluid table-responsive">
-                    <table class="table text-center table-striped " id="table_codes">
+                    <table class="table text-center table-striped " id="table_codes_list">
                         <thead>
                             @if (Auth::user()->rol == 'GERENCIA')
                                 <tr>
@@ -132,9 +132,6 @@
                     ``,
                     'error'
                 )
-                showTableContentList()
-
-                getCodeName.value = ''
             }
 
         })
@@ -145,8 +142,8 @@
         async function showTableContentList() {
 
 
-            if ($.fn.DataTable.isDataTable('#table_codes')) {
-                $('#table_codes').DataTable().destroy();
+            if ($.fn.DataTable.isDataTable('#table_codes_list')) {
+                $('#table_codes_list').DataTable().destroy();
             }
             let addTableContent = document.getElementById('content_table_list')
             let response = await fetch('/admin/get-codes').catch((error) => {
@@ -176,7 +173,7 @@
 
             }
 
-            $("#table_codes").DataTable({
+            $("#table_codes_list").DataTable({
                 drawCallback: function(settings) {
                     deleteCode()
                 },
@@ -211,7 +208,7 @@
                             'success'
                         )
 
-                        showTableContentList()
+                        await showTableContentList()
                     } else {
                         Swal.fire(
                             `${data.message}`,

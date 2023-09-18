@@ -99,19 +99,20 @@ class ProductsController extends Controller
                 $vehicules = Vehicules::where('id', $product['product_vehicule_compatibility'])->get();
                 $vehiculeOutput = $vehicules[0]['vehicule_brand_model'].$vehicules[0]['vehicule_date'].$vehicules[0]['vehicule_motor_lits'].$vehicules[0]['vehicule_motor_type'].$vehicules[0]['vehicule_motor_system'];
             }
-
-            $objProduct->id=$product['id'];
-            $objProduct->code=$code[0]['code'];
-            $objProduct->name=$product['product_name'];
-            $objProduct->product_category_compatibility=$categoryOutput;
-            $objProduct->product_buying=$product['product_buying'];
-            $objProduct->product_selling=$product['product_selling'];
-            $objProduct->product_quantity=$product['product_quantity'];
-            $objProduct->product_earnings=$product['product_earnings'];
-            $objProduct->product_image=$product['product_image'];
-            $objProduct->product_vehicule_compability=$vehiculeOutput;
-            $objProduct->status='DISPONIBLE';
-            array_push($ouput, $objProduct);
+            if(count($code) > 0){
+                $objProduct->id=$product['id'];
+                $objProduct->code=$code[0]['code'];
+                $objProduct->name=$product['product_name'];
+                $objProduct->product_category_compatibility=$categoryOutput;
+                $objProduct->product_buying=$product['product_buying'];
+                $objProduct->product_selling=$product['product_selling'];
+                $objProduct->product_quantity=$product['product_quantity'];
+                $objProduct->product_earnings=$product['product_earnings'];
+                $objProduct->product_image=$product['product_image'];
+                $objProduct->product_vehicule_compability=$vehiculeOutput;
+                $objProduct->status='DISPONIBLE';
+                array_push($ouput, $objProduct);
+            }
         }
 
        return response()->json([
@@ -129,13 +130,14 @@ class ProductsController extends Controller
         foreach ($products as $key => $product) {
             $productList = new stdClass();
             $code = Codes::where('id', $product['code'])->get();
-            $productList->code=$code[0]['code'];
-            $productList->product_name=$product['product_name'];
-            $productList->product_buying=$product['product_buying'];
-            $productList->product_selling=$product['product_selling'];
-            $productList->product_quantity=$product['product_quantity'];
-
-            array_push($output, $productList);
+            if(count($code) > 0 ){
+                $productList->code=$code[0]['code'];
+                $productList->product_name=$product['product_name'];
+                $productList->product_buying=$product['product_buying'];
+                $productList->product_selling=$product['product_selling'];
+                $productList->product_quantity=$product['product_quantity'];
+                array_push($output, $productList);
+            }
         }
 
         return response()->json([

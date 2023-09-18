@@ -637,6 +637,7 @@
                 console.log(error)
             })
             let data = await response.json()
+            console.log(data)
             if (data.success == true) {
                 addTableContent.innerHTML = ''
                 data.products.forEach((product, index) => {

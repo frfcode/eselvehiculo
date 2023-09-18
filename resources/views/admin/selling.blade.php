@@ -146,6 +146,7 @@
                                 <th scope="col">Precio Total</th>
                                 <th scope="col">Fecha Factura</th>
                                 <th scope="col">Revisar</th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody id="sales_today"></tbody>
@@ -186,19 +187,21 @@
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
                         <h3>Ventas Mensaules</h3>
                     </div>
-                    <table class="table table-striped table-responsive">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">N° Factura</th>
-                                <th scope="col">Precio Total</th>
-                                <th scope="col">Fecha Factura</th>
-                                <th scope="col">Revisar</th>
-                            </tr>
-                        </thead>
-                        <tbody id="sales_monthly">
-                        </tbody>
-                    </table>
+                    <div class="container-fluid table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">N° Factura</th>
+                                    <th scope="col">Precio Total</th>
+                                    <th scope="col">Fecha Factura</th>
+                                    <th scope="col">Revisar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sales_monthly">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -675,13 +678,14 @@
 
 
         async function salesFactureTable() {
-            if ($.fn.DataTable.isDataTable('#table_sales_monthly')) {
-                $('#table_sales_monthly').DataTable().destroy();
+            if ($.fn.DataTable.isDataTable('#table_sales_month')) {
+                $('#table_sales_month').DataTable().destroy();
             }
 
             if ($.fn.DataTable.isDataTable('#table_sales_today')) {
                 $('#table_sales_today').DataTable().destroy();
             }
+
             let tableFactureToday = document.getElementById('sales_today')
             let getUserRol = "@php echo Auth::user()->rol @endphp";
             let tableFactureMonth = ''
@@ -709,22 +713,22 @@
                    <td>${facture.total_price}</td>
                    <td>${facture.created_at.split(' ')[0]} | ${facture.created_at.split(' ')[1].split('.')[0]}</td>
                    <td><a href="/admin/facture/${facture.id}" class="btn btn-danger w-100" id="btn_generate_Facture">Descargar</a></td>
-                   <td><button class="btn btn-danger w-20" id="btn_delete_facture" value="${facture.id}">eliminar</button></td>
+                   <td><button class="btn btn-danger btn-block" id="btn_delete_facture" value="${facture.id}">eliminar</button></td>
                 </tr>
                `
                     });
 
                     /* data.history[1].forEach((facture, index) => {
-                                                                                                                                                                                                                                                                        tableFactureWeek.innerHTML += `
-                    <tr>
-                      <th scope="row">${(index + 1)}</th>
-                       <td>${facture.id}</td>
-                       <td>${facture.total_price}</td>
-                       <td>${facture.created_at.split(' ')[0]} | ${facture.created_at.split(' ')[1].split('.')[0]}</td>
-                       <td><a href="/admin/facture/${facture.id}" class="btn btn-danger w-100" id="btn_generate_Facture">Descargar</a></td>
-                    </tr>
-                `
-                                                                                                                                                                                                                                                                    }) */
+                                                                                                                                                                                                                                                                                                                                        tableFactureWeek.innerHTML += `
+                <tr>
+                  <th scope="row">${(index + 1)}</th>
+                   <td>${facture.id}</td>
+                   <td>${facture.total_price}</td>
+                   <td>${facture.created_at.split(' ')[0]} | ${facture.created_at.split(' ')[1].split('.')[0]}</td>
+                   <td><a href="/admin/facture/${facture.id}" class="btn btn-danger w-100" id="btn_generate_Facture">Descargar</a></td>
+                </tr>
+            `
+                                                                                                                                                                                                                                                                                                                                    }) */
 
                     data.history[2].forEach((facture, index) => {
                         tableFactureWeek.innerHTML += `
@@ -737,9 +741,7 @@
                 </tr>
             `
                     })
-                    $('#table_sales_month').DataTable()
-                    $('#table_sales_today').DataTable()
-                    deleteFactureToday()
+
                 } else {
                     data.history[0].forEach((facture, index) => {
                         tableFactureWeek.innerHTML += `
@@ -752,12 +754,15 @@
                 </tr>
                `
                     });
-
-                    $('#table_sales_monthly').DataTable()
                 }
 
             }
-
+            $('#table_sales_month').DataTable()
+            $('#table_sales_today').DataTable({
+                drawCallback: function(settings) {
+                    deleteFactureToday()
+                }
+            })
         }
 
 
@@ -790,7 +795,6 @@
                     if (data.success == true) {
                         await salesFactureTable()
                         await getProducsWords()
-                        await salesFactureTable()
                         Swal.fire(
                             `${data.message}`,
                             ``,

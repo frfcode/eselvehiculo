@@ -27,12 +27,20 @@ class BillingController extends Controller
         $products = $data->input('products');
 
         foreach ($products as $product) {
-            $codeID = Codes::select('id')->where('code', '=' ,$product["code"])->get();
+            $codeID = Codes::where('code', '=' ,$product["code"])->get();
             if(count($codeID) > 1){
                 return response()->json([
                     'success' => false,
-                    'message' => 'Error, el codigo de facturacion esta repetido en el inventario',
+                    'message' => 'Error, el codigo '.$product["code"].' esta repetido en el inventario, por favor eliminelo de su lista de ventas, asi mismo vaya a Codigos y elimine los codigos repetidos incluyendo el original luego vuelva cree nuevamente el codigo y agregue los productos correspondientes',
                 ]);
+            }
+
+            if(empty($codeID)){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error, el codigo '.$product["code"].' no existe en el inventario, por favor agregue el codigo y vuelva a intentar',
+                ]);
+
             }
         }
 
@@ -194,7 +202,13 @@ class BillingController extends Controller
         foreach ($getHistoyProductsByFacture as $key => $oldProduct) {
             try {
                 $codeID = Codes::select('id')->where('code', $oldProduct["code"])->get();
-                $getCodeID = $codeID[0]->id;
+                if(count($codeID) == 0){
+                    HistorySellings::where('n_facture',$factureID)->delete();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Error el codigo no existe, se eliminara esta factura automaticamente, por favor refrescar la pagina',
+                    ]);
+                }
                 $findNameProduct = strtoupper($oldProduct["product"]);
                 $maxQuantity = Products::select('product_quantity')->where('product_name', $findNameProduct)->get();
                 $sumQuantity = (int) $maxQuantity[0]['product_quantity'] + (int) $oldProduct["product_cant"];
