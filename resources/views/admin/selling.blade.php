@@ -133,10 +133,7 @@
     {{-- SELLING LIST BY DAY --}}
     <div class="row" id="selling_content">
         <div class="col-12">
-            <div class="card mt-4">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
-                    <h3>Ventas De Hoy</h3>
-                </div>
+            <div class="mt-4">
                 <div class="container-fluid table-responsive">
                     <table class="table table-striped" id="table_sales_today">
                         <thead>
@@ -158,10 +155,7 @@
     @if (Auth::user()->rol != 'GERENCIA')
         <div class="row hidden-content" id="selling_content">
             <div class="col-12">
-                <div class="card mt-4">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
-                        <h3>Ventas Mensuales</h3>
-                    </div>
+                <div class="mt-4">
                     <div class="container-fluid table-responsive">
                         <table class="table table-striped" id="table_sales_month">
                             <thead>
@@ -183,7 +177,7 @@
         {{-- SELLING LIST BY MONTH --}}
         <div class="row hidden-content" id="selling_content">
             <div class="col-12">
-                <div class="card mt-4">
+                <div class="mt-4">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
                         <h3>Ventas Mensaules</h3>
                     </div>
@@ -719,7 +713,7 @@
                     });
 
                     /* data.history[1].forEach((facture, index) => {
-                                                                                                                                                                                                                                                                                                                                        tableFactureWeek.innerHTML += `
+                                                                                                                                                                                                                                                                                                                                                        tableFactureWeek.innerHTML += `
                 <tr>
                   <th scope="row">${(index + 1)}</th>
                    <td>${facture.id}</td>
@@ -728,7 +722,7 @@
                    <td><a href="/admin/facture/${facture.id}" class="btn btn-danger w-100" id="btn_generate_Facture">Descargar</a></td>
                 </tr>
             `
-                                                                                                                                                                                                                                                                                                                                    }) */
+                                                                                                                                                                                                                                                                                                                                                    }) */
 
                     data.history[2].forEach((facture, index) => {
                         tableFactureWeek.innerHTML += `
@@ -808,6 +802,8 @@
                             ``,
                             'error'
                         )
+
+                        await salesFactureTable()
 
                     }
                 })

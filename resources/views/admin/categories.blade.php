@@ -32,15 +32,13 @@
         </div>
     </div>
     {{-- LISTA DE CATEGORIA --}}
-    <div class="row">
+    <div class="row" id="category_content">
         @if (Auth::user()->rol != 'GERENCIA')
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3 my-2">
                 <button type="button" class="btn btn-primary btn-block" id="btn_config_save_menu">Guardar configuracion de
                     menu</button>
             </div>
         @endif
-    </div>
-    <div class="row" id="category_content">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div class="mt-2">
                 <div class="container-fluid table-responsive">

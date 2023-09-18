@@ -206,12 +206,27 @@ class BillingController extends Controller
                     HistorySellings::where('n_facture',$factureID)->delete();
                     return response()->json([
                         'success' => false,
-                        'message' => 'Error el codigo no existe, se eliminara esta factura automaticamente, por favor refrescar la pagina',
+                        'message' => 'Error el codigo no existe, se eliminara esta factura automaticamente, por favor refresque la pagina y vuela a darle eliminar',
                     ]);
                 }
                 $findNameProduct = strtoupper($oldProduct["product"]);
                 $maxQuantity = Products::select('product_quantity')->where('product_name', $findNameProduct)->get();
+                if(count($maxQuantity) == 0 || empty($maxQuantity)){
+                    HistorySellings::where('n_facture',$factureID)->delete();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Error esta factura no posee productos, se eliminara automaticamente, por favor refresque la pagina y vuela a darle eliminar',
+                    ]);
+                }
                 $sumQuantity = (int) $maxQuantity[0]['product_quantity'] + (int) $oldProduct["product_cant"];
+                $getProducts = Products::where('code', '=', $codeID[0]->id)->get();
+                if(count($getProducts) == 0){
+                    HistorySellings::where('n_facture',$factureID)->delete();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Error esta factura no posee productos, se eliminara automaticamente, por favor refresque la pagina y vuela a darle eliminar',
+                    ]);
+                }
                 Products::where('code', '=', $codeID[0]->id)->where('product_name','=', $findNameProduct)->update(['product_quantity'=>$sumQuantity]);
                 $updateProducts++;
             } catch (\Exception $e) {
@@ -223,7 +238,7 @@ class BillingController extends Controller
                 } else {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Error de base de datos se detuvo en producto '.$oldProduct["product"].' '.$e,
+                        'message' => 'Error de base de datos se detuvo en producto '.$maxQuantity.' '.$e,
                     ]);
                 }
             }
