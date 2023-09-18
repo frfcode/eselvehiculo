@@ -78,30 +78,33 @@ tbody tr td {
         <p class="text-bold">WEBSITE: WWW.ESELVEHICULO.COM</p>
     </div>
     <div class="element-margin-top">
-      <p>FECHA: {{explode(" ", $products[0]['created_at'])[0]}} - {{date("g:i a",strtotime($products[0]['created_at']))}} </p>
+      <p>FECHA: <span class="text-bold">{{explode(" ", $products[0]['created_at'])[0]}} - {{date("g:i a",strtotime($products[0]['created_at']))}}</span> </p>
       <p>VENDIDO POR: <span class="text-bold">{{strtoupper($total[0]->vendor)}}</span></p>
       <p>PARA EL CLIENTE: <span class="text-bold">{{strtoupper($total[0]->client)}}</span></p>
+      <p>CANT. PRODUCTOS: <span class="text-bold">{{count($products)}}</span> </p>
     </div>
   </div>
   <div class="recibe-main">
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">Codigo</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">Canitdad</th>
-          <th scope="col">Precio</th>
-          <th scope="col">Monto</th>
+            <th scope="col">N°</th>
+            <th scope="col">Codigo</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Canitdad</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Monto</th>
         </tr>
       </thead>
       <tbody>
         @foreach($products as $key => $product)
         <tr>
-          <td>{{$product['code']}}</td>
-          <td>{{$product['product']}}</td>
-          <td>{{$product['product_cant']}}</td>
-          <td>{{$product['price']}}</td>
-          <td>{{(int) $product['price'] *  (int) $product['product_cant']}}</td>
+            <td>{{($key + 1)}}</td>
+            <td>{{$product['code']}}</td>
+            <td>{{$product['product']}}</td>
+            <td>{{$product['product_cant']}}</td>
+            <td>{{$product['price']}}</td>
+            <td>{{(float) $product['price'] * (float) $product['product_cant']}}</td>
         </tr>
         @endforeach
       </tbody>
@@ -109,8 +112,8 @@ tbody tr td {
   </div>
   <div class="recibe-footer">
     <div class="text-right">
-        <h3>IVA: {{$total[0]->iva}}</h3>
-        <h3>Total: {{$total[0]->total_price}}</h3>
+        <h3>IVA: {{ round((float) $total[0]->iva) }}$</h3>
+        <h3>Total: {{  round((float) $total[0]->total_price) }}$</h3>
     </div>
   </div>
 </body>

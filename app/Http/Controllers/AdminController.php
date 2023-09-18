@@ -54,8 +54,4 @@ class AdminController extends Controller
     public function clients(){
         return view('admin.clients');
     }
-
-    public function change_password(){
-        return view('admin.reset');
-    }
 }

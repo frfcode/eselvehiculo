@@ -26,7 +26,7 @@ class BillingController extends Controller
         $billing = $data->input('facture');
         $products = $data->input('products');
 
-        foreach ($products as $key => $product) {
+        foreach ($products as $product) {
             $codeID = Codes::select('id')->where('code', '=' ,$product["code"])->get();
             if(count($codeID) > 1){
                 return response()->json([
@@ -46,31 +46,50 @@ class BillingController extends Controller
             'total_price'=>$totalPrice
         ]);
 
-        foreach ($products as $key => $product) {
+        $productsADD = 0;
 
-            HistorySellings::create([
-                'n_facture'=>$billing,
-                'code'=> $product["code"],
-                'product'=> $product["name"],
-                'price'=> $product["price"],
-                'product_cant'=> $product["product_cant"],
-                'created_at'=> Carbon::now()
-            ]);
-
-            //DISCOUNT PRODUCT QUANTITY
-            $codeID = Codes::select('id')->where('code', '=' ,$product["code"])->get();
-            $getCodeID = $codeID[0]->id;
-            $findNameProduct = strtoupper($product["name"]);
-            $maxQuantity = Products::select('product_quantity')->where('code', $getCodeID)->where('product_name', $findNameProduct)->get();
-            $restQuantity = (int) $maxQuantity[0]['product_quantity'] - (int) $product["product_cant"];
-            Products::where('code', '=', $codeID[0]->id)->where('product_name','=', $findNameProduct)->update(['product_quantity'=>$restQuantity]);
+        foreach ($products as $product) {
+            try {
+                HistorySellings::create([
+                    'n_facture'=>$billing,
+                    'code'=> $product["code"],
+                    'product'=> $product["name"],
+                    'price'=> $product["price"],
+                    'product_cant'=> $product["product_cant"],
+                    'created_at'=> Carbon::now()
+                ]);
+                $productsADD++;
+            } catch (\Exception $e) {
+                if ($e instanceof \Illuminate\Database\QueryException) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Error a insertar datos del producto '.$product["name"],
+                    ]);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Error de base de datos se detuvo en producto '.$product["name"],
+                    ]);
+                }
+            }
         }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Facturación exitosa, generando factura',
-        ]);
+        if(count($products) == $productsADD){
+            foreach ($products as $product) {
+                //DISCOUNT PRODUCT QUANTITY
+                $codeID = Codes::select('id')->where('code', '=' ,$product["code"])->get();
+                $getCodeID = $codeID[0]->id;
+                $findNameProduct = strtoupper($product["name"]);
+                $maxQuantity = Products::select('product_quantity')->where('code', $getCodeID)->where('product_name', $findNameProduct)->get();
+                $restQuantity = (int) $maxQuantity[0]['product_quantity'] - (int) $product["product_cant"];
+                Products::where('code', '=', $codeID[0]->id)->where('product_name','=', $findNameProduct)->update(['product_quantity'=>$restQuantity]);
+            }
 
+            return response()->json([
+                'success' => true,
+                'message' => 'Facturación exitosa, generando factura',
+            ]);
+        }
     }
 
     public function generateFacture($factureID){
@@ -90,14 +109,15 @@ class BillingController extends Controller
         //TODAY
         $dateToday = date("Y-m-d");
 
-        //WEEK
-        $dateInit = '2023-05-15';
-        $date = $this->getDateSellingByWeek($dateInit);
-
         //MONTH
+        $dateByMonth = date('Y').'-'.date('m').'-15';
+        $dateByMonth = $this->getDateSellingByWeek($dateByMonth);
 
+        //YEAR
+        $dateInit = date('Y').'-01-01';
+        $dateInit = $this->getDateSellingByWeek($dateInit);
 
-        //BY DAY
+        //HOURS BY DAY
         $init = '00:00:00';
         $finish = '23:59:59';
 
@@ -105,20 +125,20 @@ class BillingController extends Controller
         $startDate = Carbon::parse($dateToday)->setTimeFromTimeString($init);
         $finishDate = Carbon::parse($dateToday)->setTimeFromTimeString($finish);
         //BY WEEK
-        $startDateWeek = Carbon::parse($date)->setTimeFromTimeString($init)->startOfWeek();
-        $finishDateWeek = Carbon::parse($date)->setTimeFromTimeString($finish)->startOfWeek();
+        //$startDateWeek = Carbon::parse($date)->setTimeFromTimeString($init)->startOfWeek();
+        //$finishDateWeek = Carbon::parse($date)->setTimeFromTimeString($finish)->startOfWeek();
         //BY MONTH
-        $startDateMonth = Carbon::parse($date)->setTimeFromTimeString($init)->startOfMonth();
-        $finishDateMonth = Carbon::parse($date)->setTimeFromTimeString($finish)->startOfMonth();
+        //$startDateMonth = Carbon::parse($date)->setTimeFromTimeString($init)->startOfMonth();
+        //$finishDateMonth = Carbon::parse($date)->setTimeFromTimeString($finish)->startOfMonth();
 
         $sellingToday = '';
-        $sellingWeek = '';
+        //$sellingWeek = '';
         $sellingMonth = '';
 
         if(Auth::user()->rol != 'GERENCIA'){
             $sellingToday = Billing::whereDate('created_at','>=',$startDate)->whereDate('created_at','<=',$finishDate)->orderBy('id', 'DESC')->get();
-            $sellingWeek = Billing::whereDate('created_at','>=',$startDateWeek)->whereDate('created_at','<=',$finishDateWeek)->orderBy('id', 'DESC')->get();
-            $sellingMonth = Billing::whereDate('created_at','>=',$startDateMonth)->whereDate('created_at','<=',$finishDateMonth)->orderBy('id', 'DESC')->get();
+            //$sellingWeek = Billing::whereDate('created_at','>=',$startDateWeek)->whereDate('created_at','<=',$finishDateWeek)->orderBy('id', 'DESC')->get();
+            $sellingMonth = Billing::whereDate('created_at','>=',$dateInit)->orderBy('id', 'DESC')->get();
         }else{
             $sellingToday = Billing::whereDate('created_at','>=',$startDate)->whereDate('created_at','<=',$finishDate)->where('vendor','=',Auth::user()->name)->orderBy('id', 'DESC')->get();
         }
@@ -137,7 +157,7 @@ class BillingController extends Controller
             array_push($today, $obj);
 
         }
-
+        /*
         foreach ($sellingWeek as $key => $sellings) {
             $obj = new stdClass();
             $obj->vendor = $sellings->vendor;
@@ -148,6 +168,7 @@ class BillingController extends Controller
             array_push($week, $obj);
 
         }
+        */
 
         foreach ($sellingMonth as $key => $sellings) {
             $obj = new stdClass();
@@ -160,7 +181,6 @@ class BillingController extends Controller
 
         }
 
-
         return response()->json([
             'success' => true,
             'history' => [$today, $week, $month],
@@ -168,28 +188,49 @@ class BillingController extends Controller
     }
 
     public function deleteSales($factureID){
-        Billing::where('id',$factureID)->delete();
-        DB::delete('delete from history_sales where n_facture = ?',[$factureID]);
-        $idFacture = Billing::max('id');
-        return response()->json([
-            'success' => true,
-            'message' => 'Producto eliminado exitosamente.',
-            'factureID' => $idFacture
-        ]);
+
+        $getHistoyProductsByFacture = HistorySellings::where('n_facture', $factureID)->get();
+        $updateProducts = 0;
+        foreach ($getHistoyProductsByFacture as $key => $oldProduct) {
+            try {
+                $codeID = Codes::select('id')->where('code', $oldProduct["code"])->get();
+                $getCodeID = $codeID[0]->id;
+                $findNameProduct = strtoupper($oldProduct["product"]);
+                $maxQuantity = Products::select('product_quantity')->where('product_name', $findNameProduct)->get();
+                $sumQuantity = (int) $maxQuantity[0]['product_quantity'] + (int) $oldProduct["product_cant"];
+                Products::where('code', '=', $codeID[0]->id)->where('product_name','=', $findNameProduct)->update(['product_quantity'=>$sumQuantity]);
+                $updateProducts++;
+            } catch (\Exception $e) {
+                if ($e instanceof \Illuminate\Database\QueryException) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Error al actualizar los datos de '.$oldProduct["product"].' '.$e,
+                    ]);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Error de base de datos se detuvo en producto '.$oldProduct["product"].' '.$e,
+                    ]);
+                }
+            }
+        }
+
+        if(count($getHistoyProductsByFacture) == $updateProducts){
+            Billing::where('id',$factureID)->delete();
+            DB::delete('delete from history_sales where n_facture = ?',[$factureID]);
+            $idFacture = Billing::max('id');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Factura eliminada y Devolución exitosa.',
+                'factureID' => $idFacture
+            ]);
+        }
     }
 
     private function getDateSellingByWeek($initDate){
         date_default_timezone_set('America/Caracas');
-        $dateNow = date("Y-m-d");
-        $dateActually = Carbon::parse($dateNow);
-        $dateWeek = Carbon::parse($initDate)->startOfWeek();
-        return $dateWeek;
-        /*
-        if ($dateActually->greaterThan($dateWeek)) {
-            $this->getDateSellingByWeek($dateNow);
-        } elseif ($dateActually->lessThan($dateWeek)) {
-            return $dateActually;
-        }
-        */
+        $month = Carbon::parse($initDate)->addMonth();
+        return $month;
     }
 }

@@ -32,6 +32,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+
         $title = 'Venta de repuestos para tú vehículo | eselvehiculo';
         $description = 'Venta de filtros, bujías, correas y accesorios para tú vehículo o carro con los mejores precios del mercado y gran variedad de marcas disponibles';
         $menu = json_decode(file_get_contents(storage_path() . "/app/menu_items.json"), true);

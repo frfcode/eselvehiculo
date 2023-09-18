@@ -196,34 +196,36 @@
             </div>
         </div>
     </div>
+@stop
 
-    <script>
-        let getButtonList = document.querySelectorAll('#button_history_item')
-        let getConent = document.querySelectorAll('#history_content')
-    
-    getButtonList.forEach((buttonItem, index) => {
-        buttonItem.addEventListener('click',()=>{
-            if(!buttonItem.classList.contains('active')){
-                buttonItem.classList.add('active')
-            }
+@section('js')
+<script>
+    let getButtonList = document.querySelectorAll('#button_history_item')
+    let getConent = document.querySelectorAll('#history_content')
 
-            if(getConent[index].classList.contains('hidden-content')){
-                getConent[index].classList.remove('hidden-content')
-            }
-            
-            disableOtherButton(getButtonList, index)
-        })
+getButtonList.forEach((buttonItem, index) => {
+    buttonItem.addEventListener('click',()=>{
+        if(!buttonItem.classList.contains('active')){
+            buttonItem.classList.add('active')
+        }
 
-         function disableOtherButton(buttonList, buttonIndex){
-             buttonList.forEach((element, index) => {
-                 if(index != buttonIndex){
-                    if(buttonList[index].classList.contains('active')){
-                         buttonList[index].classList.remove('active')
-                         getConent[index].classList.add('hidden-content')
-                    }
-                 }
-             });
-         }
-    });
-    </script>
+        if(getConent[index].classList.contains('hidden-content')){
+            getConent[index].classList.remove('hidden-content')
+        }
+
+        disableOtherButton(getButtonList, index)
+    })
+
+     function disableOtherButton(buttonList, buttonIndex){
+         buttonList.forEach((element, index) => {
+             if(index != buttonIndex){
+                if(buttonList[index].classList.contains('active')){
+                     buttonList[index].classList.remove('active')
+                     getConent[index].classList.add('hidden-content')
+                }
+             }
+         });
+     }
+});
+</script>
 @stop

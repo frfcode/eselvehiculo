@@ -373,12 +373,12 @@ return [
             'label'       => 4,
             'label_color' => 'success',
         ], */
-        ['header' => 'Configuracion de Cuenta'],
+       /*  ['header' => 'Configuracion de Cuenta'],
         [
             'text' => 'Cambiar password',
             'url'  => 'admin/change_password',
             'icon' => 'fas fa-fw fa-lock',
-        ],
+        ], */
        /*  [
             'text'    => 'multilevel',
             'icon'    => 'fas fa-fw fa-share',
@@ -471,7 +471,7 @@ return [
 
     'plugins' => [
         'Datatables' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
@@ -491,7 +491,7 @@ return [
             ],
         ],
         'Select2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
@@ -516,7 +516,7 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
